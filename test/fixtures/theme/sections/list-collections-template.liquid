@@ -1,0 +1,67 @@
+<div class="list-collections-template" data-section-id="{{ section.id }}" data-section-type="list-collections-template">
+  <div class="page-width">
+    <div class="grid text-center">
+      <div class="grid__item medium-up--ten-twelfths medium-up--push-one-twelfth">
+        <header class="section-header">
+          <h1 class="section-header__title h2">{{ collection.title }}</h1>
+          {% if collection.description != blank %}
+            <div class="section-header__description rte">
+              {{ collection.description }}
+            </div>
+          {% endif %}
+        </header>
+      </div>
+    </div>
+
+    <div class="card-list grid" data-columns="{{ section.settings.products }}">
+      <div class="card-list__column grid grid__item {% if section.settings.products == '3' %} medium-up--one-third{% else %} medium-up--one-half{% endif %}">
+        {% for collection in collections %}
+          {% unless collection.handle == 'frontpage' %}
+            {% include 'collection-card', collection: collection, width: section.settings.products %}
+          {% endunless %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if collections.size > 0 %}
+      <div class="card-list__spinner">
+        {% include 'spinner', position: 'top' %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "settings": [
+    {
+      "type": "select",
+      "id": "products",
+      "label": "Products per row",
+      "default": "2",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_spacing",
+      "label": "Enable image spacing"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

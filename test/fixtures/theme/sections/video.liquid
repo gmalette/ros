@@ -1,0 +1,281 @@
+<style>
+  #VideoSection--{{ section.id }} .video-section__cover-background {
+    background-color: {{ section.settings.background_color }};
+    background-position: {{ section.settings.cover_image_position }};
+  }
+
+  #VideoSection--{{ section.id }} .video-section__cover-text {
+    color: {{ section.settings.cover_text_color }}
+  }
+
+  #VideoSection--{{ section.id }} .video-section__load-player-button-triangle {
+    border-left-color: {{ section.settings.cover_text_color }}
+  }
+
+  #VideoSection--{{ section.id }} .video-section__load-player-button-circle {
+    border-color: {{ section.settings.cover_text_color }}
+  }
+</style>
+
+{% if section.settings.cover_image != blank %}
+  <style>
+    @media screen (max-width: 600px) {
+      #VideoSection--{{ section.id }} .video-section__cover-background {
+        background-image: url('{{ section.settings.cover_image | img_url: '800x' }}');
+      }
+    }
+
+    @media screen and (min-width: 601px) and (max-width: 800px) {
+      #VideoSection--{{ section.id }} .video-section__cover-background {
+        background-image: url('{{ section.settings.cover_image | img_url: '1000x' }}');
+      }
+    }
+
+    @media screen and (min-width: 601px) and (max-width: 1000px) {
+      #VideoSection--{{ section.id }} .video-section__cover-background {
+        background-image: url('{{ section.settings.cover_image | img_url: '1200x' }}');
+      }
+    }
+
+    @media screen and (min-width: 1001px) {
+      #VideoSection--{{ section.id }} .video-section__cover-background {
+        background-image: url('{{ section.settings.cover_image | img_url: '2000x' }}');
+      }
+    }
+  </style>
+{% endif %}
+
+{% if section.settings.show_overlay %}
+  <style>
+    #VideoSection--{{ section.id }} .video-section__cover-text {
+      color: {{ section.settings.overlay_text }};
+    }
+
+    #VideoSection--{{ section.id }} .video-section__load-player-button-triangle {
+      border-left-color: {{ section.settings.overlay_text }};
+    }
+
+    #VideoSection--{{ section.id }} .video-section__load-player-button.animated .video-section__load-player-button-circle,
+    #VideoSection--{{ section.id }} .video-section__load-player-button-circle {
+      border-color: {{ section.settings.overlay_text }};
+    }
+
+    #VideoSection--{{ section.id }} .video-section__cover-overlay {
+      background-color: {{ section.settings.overlay_color }};
+      opacity: {{ section.settings.overlay_opacity }};
+    }
+  </style>
+{% endif %}
+
+<div id="VideoSection--{{ section.id }}" class="video-section" data-section-id="{{ section.id }}" data-section-type="video-section" data-video-id="{{ section.settings.video_url.id }}" data-video-type="{{ section.settings.video_url.type }}">
+  <div class="video-section__body-overlay"></div>
+  <button class="btn btn--clear btn--square video-section__player-close">
+    <span class="visually-hidden">{{ 'video.close' | t }}</span>
+    {% include 'icon-close' %}
+  </button>
+  <div class="video-section__player"></div>
+  <div class="video-section__cover">
+    <div class="video-section__cover-background">
+      {% if section.settings.cover_image == blank %}
+        {% capture current %}{% cycle 1, 2 %}{% endcapture %}
+        {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
+      {% endif %}
+    </div>
+    <div class="video-section__cover-overlay" style="background-color: {{ section.settings.cover_overlay_color }}; opacity: {{ section.settings.cover_overlay_opacity }};"></div>
+    <div class="video-section__cover-content">
+      <h3 class="video-section__cover-text">{{ section.settings.cover_text }}</h3>
+      <button class="btn btn--clear video-section__load-player-button">
+        <span class="visually-hidden">{{ 'video.play' | t }}</span>
+        <div class="video-section__load-player-button-triangle"></div>
+        <div class="video-section__load-player-button-circle"></div>
+      </button>
+      <p class="video-section__error"></p>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Video Section",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Video Settings"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "Video link",
+      "accept": ["youtube", "vimeo"],
+      "default": "https:\/\/www.youtube.com\/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "type": "header",
+      "content": "Video cover"
+    },
+    {
+      "type": "text",
+      "id": "cover_text",
+      "label": "Cover text"
+    },
+    {
+      "type": "image_picker",
+      "id": "cover_image",
+      "label": "Cover image"
+    },
+    {
+      "type": "select",
+      "id": "cover_image_position",
+      "label": "Cover image position",
+      "default": "center center",
+      "options": [
+        {
+          "label": "Top left",
+          "value": "top left"
+        },
+        {
+          "label": "Top center",
+          "value": "top center"
+        },
+        {
+          "label": "Top right",
+          "value": "top right"
+        },
+        {
+          "label": "Center left",
+          "value": "center left"
+        },
+        {
+          "label": "Center center",
+          "value": "center center"
+        },
+        {
+          "label": "Center right",
+          "value": "center right"
+        },
+        {
+          "label": "Bottom left",
+          "value": "bottom left"
+        },
+        {
+          "label": "Bottom center",
+          "value": "bottom center"
+        },
+        {
+          "label": "Bottom right",
+          "value": "bottom right"
+        }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_overlay",
+      "label": "Show overlay",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay Color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "overlay_text",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "overlay_opacity",
+      "label": "Opacity",
+      "default": "0.5",
+      "options": [
+        {
+          "label": "100%",
+          "value": "1"
+        },
+        {
+          "label": "95%",
+          "value": "0.95"
+        },
+        {
+          "label": "90%",
+          "value": "0.9"
+        },
+        {
+          "label": "85%",
+          "value": "0.85"
+        },
+        {
+          "label": "80%",
+          "value": "0.8"
+        },
+        {
+          "label": "75%",
+          "value": "0.75"
+        },
+        {
+          "label": "70%",
+          "value": "0.7"
+        },
+        {
+          "label": "65%",
+          "value": "0.65"
+        },
+        {
+          "label": "60%",
+          "value": "0.6"
+        },
+        {
+          "label": "55%",
+          "value": "0.55"
+        },
+        {
+          "label": "50%",
+          "value": "0.5"
+        },
+        {
+          "label": "45%",
+          "value": "0.45"
+        },
+        {
+          "label": "40%",
+          "value": "0.4"
+        },
+        {
+          "label": "35%",
+          "value": "0.35"
+        },
+        {
+          "label": "30%",
+          "value": "0.3"
+        },
+        {
+          "label": "25%",
+          "value": "0.25"
+        },
+        {
+          "label": "20%",
+          "value": "0.2"
+        },
+        {
+          "label": "0%",
+          "value": "0"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video",
+      "category": "Video"
+    }
+  ]
+}
+{% endschema %}

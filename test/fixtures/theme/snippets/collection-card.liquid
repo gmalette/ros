@@ -1,0 +1,23 @@
+<div class="grid__item card">
+  <a href="{{ collection.url }}" class="card__wrapper{% if section.settings.show_spacing %} card__wrapper--padding{% endif %} text-center">
+
+    {% if collection.image %}
+      {% assign collection_image = collection.image %}
+    {% else %}
+      {% assign collection_image = collection.products.first %}
+    {% endif %}
+
+    {% if collection_image != blank %}
+      {% include 'card-image', type: collection_image %}
+    {% endif %}
+
+    <div class="card__info">
+      <div class="card__name h4">{{ collection.title }}</div>
+      {% if section.settings.show_description and collection.description != blank %}
+        <div class="rte card__description{% if width == '2' %} card__description--padding{% endif %}">
+          {{ collection.description | strip_html | truncatewords: 15 }}
+        </div>
+      {% endif %}
+    </div>
+  </a>
+</div>

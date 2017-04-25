@@ -1,0 +1,202 @@
+{% if section.settings.enable_transparent and template.name == 'index' %}
+  <style>
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .burger-icon {
+      background-color: {{ section.settings.transparent_text_color }};
+    }
+
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__cart .icon,
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__bag .icon {
+      fill: {{ section.settings.transparent_text_color }};
+    }
+
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) a.site-header__logo {
+      color: {{ section.settings.transparent_text_color }};
+    }
+
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__navigation::after,
+    html:not(.supports-no-js) body:not(.navigation-open) .site-header--transparent:not(.site-header--fixed) .site-header__cart::after {
+      border-color: {{ section.settings.transparent_text_color }};
+    }
+  </style>
+{% endif %}
+<div class="site-header{% if section.settings.enable_transparent and template.name == 'index' %} site-header--transparent{% endif %}{% if template.name == 'index' %} site-header--homepage{% endif %}" role="banner" data-section-id="{{ section.id }}" data-section-type="header-section" data-drawer-push>
+  <header class="site-header__wrapper">
+    <div class="site-header-sections page-width">
+      <div class="site-header__section site-header__section--button">
+        <button class="site-header__navigation btn btn--clear btn--square btn--hover-scale" aria-expanded="false">
+          <span class="burger-icon burger-icon--top"></span>
+          <span class="burger-icon burger-icon--mid"></span>
+          <span class="burger-icon burger-icon--bottom"></span>
+          <span class="icon__fallback-text">{{ 'general.header.expand_navigation' | t }}</span>
+        </button>
+      </div>
+      <div class="site-header__section site-header__section--title">
+        {% comment %}
+        Use the uploaded logo from theme settings if enabled.
+        Site name gets precedence with `h1` tag on homepage, div on other pages.
+        {% endcomment %}
+        {% if template.name == 'index' %}
+          <h1 class="site-header__logo-wrapper h4" itemscope itemtype="http://schema.org/Organization">
+        {% else %}
+          <div class="site-header__logo-wrapper h4" itemscope itemtype="http://schema.org/Organization">
+        {% endif %}
+
+        <a href="/" itemprop="url" class="site-header__logo">
+          {%- capture image_size %}x{{ settings.logo_max_height }}{% endcapture -%}
+
+          {% if settings.logo %}
+            <img class="site-header__logo-image" src="{{ settings.logo | img_url: image_size }}" srcset="{{ settings.logo | img_url: image_size }} 1x, {{ settings.logo | img_url: image_size, scale: 2 }} 2x" alt="{{ settings.logo.alt | default: shop.name }}"
+                 itemprop="logo">
+
+            {% if template.name == 'index' and section.settings.enable_transparent %}
+              {% if settings.transparent_logo == blank %}
+                {%- assign transparent_logo = settings.logo -%}
+              {% else %}
+                {%- assign transparent_logo = settings.transparent_logo -%}
+              {% endif %}
+
+              <img class="site-header__logo-image site-header__logo-image--transparent" src="{{ transparent_logo | img_url: image_size }}" srcset="{{ transparent_logo | img_url: image_size }} 1x, {{ transparent_logo | img_url: image_size, scale: 2 }} 2x" alt="{{ settings.logo.alt | default: shop.name }}"
+                      itemprop="logo">
+            {% endif %}
+          {% else %}
+            {{ shop.name }}
+          {% endif %}
+        </a>
+
+        {% if template.name == 'index' %}
+          </h1>
+        {% else %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="site-header__section site-header__section--button">
+        <a href="/cart" class="btn btn--clear btn--square btn--hover-scale site-header__cart ajax-cart__toggle" aria-expanded="false">
+          {%- assign icon = 'icon-header-' | append: section.settings.icon %}
+          {% include icon %}
+          <span class="icon__fallback-text">{{ 'general.header.view_cart' | t }}</span>
+          <span class="site-header__cart-bubble{% if cart.item_count > 0 %} site-header__cart-bubble--visible{% endif %}"></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="navigation supports-no-js" data-section-id="{{ section.id }}" data-section-type="navigation" role="navigation" tabindex="-1">
+    <div class="navigation__container">
+      <ul class="navigation__links">
+        {% for link in linklists[section.settings.primary_navigation].links%}
+          {% assign child_list_handle = link.title | handleize %}
+          {% if menus[child_list_handle].links != blank %}
+            <li class="navigation__link navigation__has-sublinks navigation__has-sublinks--collapsed navigation__entrance-animation">
+              <button class="navigation__expand-sublinks" aria-expanded="{% if link.active %}true{% else %}false{% endif %}">
+                <span aria-hidden="true">{{ link.title }}</span>
+                <span class="visually-hidden">{{ 'general.navigation.toggle_sublinks' | t: link_title: link.title }}</span>
+                {% include 'icon-arrow-down' %}
+              </button>
+              <div class="navigation__sublinks-container">
+                <ul class="navigation__sublinks">
+                  {% for childlink in menus[child_list_handle].links %}
+                    <li class="navigation__sublink{% if childlink.active %} navigation__sublink--active{% endif %}">
+                      <a class="navigation__sublink-anchor" href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </li>
+          {% else %}
+            <li class="navigation__link navigation__entrance-animation{% if link.active %} navigation__link--active{% endif %}">
+            <a class="navigation__link-anchor" href="{{ link.url }}">{{ link.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+      <ul class="navigation__links">
+        {% if shop.customer_accounts_enabled %}
+          {% if customer %}
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              {% if customer.first_name != blank %}
+                {% capture first_name %}{{ customer.first_name }}{% endcapture %}
+                <a href="/account">{{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}</a>
+              {% else %}
+                <a href="/account">{{ 'layout.customer.account' | t }}</a>
+              {% endif %}
+            </li>
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              {{ 'layout.customer.log_out' | t | customer_logout_link }}
+            </li>
+          {% else %}
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              {{ 'layout.customer.log_in' | t | customer_login_link }}
+            </li>
+            <li class="navigation__link navigation__link--secondary navigation__entrance-animation">
+              {{ 'layout.customer.create_account' | t | customer_register_link }}
+            </li>
+          {% endif %}
+        {% endif %}
+        {% for link in linklists[section.settings.secondary_navigation].links %}
+          <li class="navigation__link navigation__link--secondary navigation__entrance-animation{% if link.active %} navigation__link--active{% endif %}">
+          <a href="{{ link.url }}">{{ link.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="navigation__social-sharing navigation__entrance-animation">
+        {% include 'social-links' %}
+      </div>
+
+      {% include 'search-bar', animate: true %}
+    </div>
+  </nav>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_transparent",
+      "label": "Enable transparent header on the home page",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "transparent_text_color",
+      "label": "Transparent header icons color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "primary_navigation",
+      "label": "Primary navigation",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "secondary_navigation",
+      "label": "Secondary navigation",
+      "default": "footer"
+    },
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Shopping cart icon",
+      "default": "bag",
+      "options": [
+        {
+          "label": "Bag",
+          "value": "bag"
+        },
+        {
+          "label": "Cart",
+          "value": "cart"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

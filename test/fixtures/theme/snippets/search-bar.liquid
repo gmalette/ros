@@ -1,0 +1,13 @@
+<div class="navigation__search{% if animate %} navigation__entrance-animation{% endif %}">
+  <form action="/search" method="get" role="search">
+    <div class="input-group--underline">
+      <input class="input-group__field" type="search" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | upcase }}" aria-label="{{ 'general.search.placeholder' | upcase }}">
+      <div class="input-group__btn">
+        <button type="submit" class="btn btn--clear btn--square">
+          {% include 'icon-search.liquid' %}
+          <span class="icon__fallback-text">{{ 'general.search.submit' | upcase }}</span>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

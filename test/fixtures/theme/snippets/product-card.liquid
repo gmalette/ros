@@ -1,0 +1,52 @@
+<div class="grid__item card">
+  <a href="{{ product.url | within: collection }}" class="card__wrapper{% if section.settings.show_spacing %} card__wrapper--padding{% endif %} text-center">
+
+    {% include 'card-image.liquid', type: product.featured_image %}
+
+    <div class="card__info">
+      {% if section.settings.show_vendor %}
+        <div class="card__brand">{{ product.vendor }}</div>
+      {% endif %}
+
+      <div class="card__name h4">{{ product.title }}</div>
+
+      {% if product.available %}
+        <div class="card__price">
+          {% if product.compare_at_price > product.price %}
+            {% comment %}
+              Product is on sale
+            {% endcomment %}
+            {% if product.price_varies %}
+              {% assign sale_price = product.price | money_without_trailing_zeros %}
+              {{ 'products.product.on_sale_from_html' | upcase }}
+            {% else %}
+              <span class="visually-hidden">{{ 'products.product.sale_price' | t }}</span>
+              <span class="card__price--sale">{{ product.price | money_without_trailing_zeros }}</span>
+
+              <span class="visually-hidden">{{ 'products.product.regular_price' | t }}</span>
+              <span class="card__price--regular-strike">
+                <span class="card__price--regular">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
+              </span>
+            {% endif %}
+
+          {% else %}
+            {% comment %}
+              Not on sale, but could still have varying prices
+            {% endcomment %}
+            {% if product.price_varies %}
+              {% assign price = product.price | money_without_trailing_zeros %}
+              {{ 'products.product.from_text_html' | t }}
+            {% else %}
+              {{ product.price | money_without_trailing_zeros }}
+            {% endif %}
+
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="card__availability">
+          {{ 'products.product.sold_out' | t }}
+        </div>
+      {% endif %}
+    </div>
+  </a>
+</div>

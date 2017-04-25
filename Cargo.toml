@@ -1,0 +1,9 @@
+[package]
+name = "online-store"
+version = "0.1.0"
+authors = ["Guillaume Malette <gmalette@gmail.com>"]
+
+[dependencies]
+iron = "*"
+router = "*"
+liquid = "0.9"

@@ -1,0 +1,56 @@
+<div class="article page-width">
+  <div class="article__wrapper grid">
+    <div class="article__content article__content--large grid__item medium-up--ten-twelfths medium-up--push-one-twelfth">
+      <header class="article__header">
+        {% if section.settings.blog_show_date %}
+          <span class="article__date text-small--uppercase">
+            {{ article.published_at | time_tag: format: 'month_day_year' }}
+          </span>
+        {% endif %}
+        <h1 class="article__title h2">{{ article.title }}</h1>
+      </header>
+
+      <div class="article__body h6 rte" itemprop="articleBody">
+        {{ article.content }}
+      </div>
+    </div>
+
+    {% if section.settings.show_share_buttons %}
+      {% if settings.share_facebook or settings.share_twitter or settings.share_pinterest %}
+        <div class="article__share-desktop grid__item medium-up--two-twelfths">
+          <div class="article__share-desktop-wrapper">
+            {% include 'social-sharing', type: 'article', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+          </div>
+        </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+{% if section.settings.show_share_buttons %}
+  {% if settings.share_facebook or settings.share_twitter or settings.share_pinterest %}
+    <div class="article__share-mobile">
+        {% include 'social-sharing', type: 'mobile', share_title: article.title, share_permalink: article.url, share_image: article.image %}
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Posts",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Enable sharing for blog articles",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,8 @@
+<div class="card__image-wrapper">
+  <div class="card__preloader"></div>
+  {% assign card_image = type | img_url: '1024x1024' %}
+  <img data-src="{{ card_image }}" alt="{{ type.alt | escape }}" class="card__image card__image--lazy">
+  <noscript>
+    <img src="{{ card_image }}" alt="{{ type.alt | escape }}" class="card__image">
+  </noscript>
+</div>

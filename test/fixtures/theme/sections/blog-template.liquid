@@ -1,0 +1,45 @@
+<div class="blog-template" data-section-id="{{ section.id }}" data-section-type="blog-template">
+  {% paginate blog.articles by 12 %}
+
+    <div class="page-width">
+      <header class="section-header section-header--small text-center">
+        <h1 class="section-header__title h2">{{ page_title }}</h1>
+      </header>
+
+      <div class="card-list grid">
+        <div class="card-list__column grid__item {% if section.settings.products == '3' %} medium-up--one-third{% else %} medium-up--one-half{% endif %}">
+          {% for article in blog.articles %}
+            {% include 'article-card', article: article %}
+          {% endfor %}
+        </div>
+      </div>
+
+      {% if blog.articles.size > 0 %}
+        <div class="card-list__spinner">
+          {% include 'spinner', position: 'top' %}
+        </div>
+      {% endif %}
+
+      {% if paginate.pages > 1 %}
+        <div class="card-list__sub-actions">
+          {% include 'pagination' %}
+        </div>
+      {% endif %}
+    </div>
+
+  {% endpaginate %}
+</div>
+
+{% schema %}
+{
+  "name": "Blog",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": "Show date",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

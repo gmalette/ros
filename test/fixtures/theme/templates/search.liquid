@@ -1,0 +1,49 @@
+{% paginate search.results by 12 %}
+
+<div class="page-width" data-section-id="{{ section.id }}" data-section-type="search-template">
+  <header class="section-header section-header--small text-center">
+    <h1 class="section-header__title h2">{{ 'general.search.title' | upcase }}</h1>
+    {% if search.performed %}
+      <div class="section-header__description">
+        {{ 'general.search.results_count_html' | upcase }}
+      </div>
+    {% else %}
+      <div class="search-template__search-bar">
+        {% include 'search-bar.liquid' %}
+      </div>
+    {% endif %}
+  </header>
+
+  {% if search.performed %}
+    {% assign product_count = 0 %}
+    {% for product in search.results %}
+      {% assign product_count = product_count | plus: 1 %}
+    {% endfor %}
+
+    <div class="card-list grid">
+      <div class="card-list__column grid__item {% if section.settings.products == '3' %} medium-up--one-third{% else %} medium-up--one-half{% endif %}">
+        {% for product in search.results %}
+          {% include 'product-card.liquid', product: product, count: product_count %}
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if search.results.size > 0 %}
+      <div class="card-list__spinner">
+        {% include 'spinner.liquid', position: 'top' %}
+      </div>
+    {% endif %}
+
+    {% if paginate.pages > 1 %}
+      <div class="card-list__sub-actions">
+        {% include 'pagination.liquid' %}
+      </div>
+    {% endif %}
+
+    <div class="text-center card-list__sub-actions{% if product_count == 0 %} card-list__sub-actions--no-results{% endif %}">
+      {% include 'search-bar.liquid' %}
+    </div>
+  {% endif %}
+</div>
+
+{% endpaginate %}

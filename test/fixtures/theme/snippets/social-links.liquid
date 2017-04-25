@@ -1,0 +1,59 @@
+<div class="social-links" data-permalink="{{ permalinkURL }}">
+
+  {% if settings.social_facebook_link != blank %}
+    <a target="_blank" href="{{ settings.social_facebook_link }}" title="{{ 'general.social.alt_text.view_on_facebook' | t }}">
+      {% include 'icon-facebook' %}
+      <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.link_facebook' | t }}</span>
+      <span class="visually-hidden">{{ 'general.social.alt_text.view_on_facebook' | t }}</span>
+    </a>
+  {% endif %}
+
+  {% if settings.social_twitter_link != blank %}
+    <a target="_blank" href="{{ settings.social_twitter_link }}" title="{{ 'general.social.alt_text.view_on_twitter' | t }}">
+      {% include 'icon-twitter' %}
+      <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.link_twitter' | t }}</span>
+      <span class="visually-hidden">{{ 'general.social.alt_text.view_on_twitter' | t }}</span>
+    </a>
+  {% endif %}
+
+  {% if settings.social_pinterest_link != blank %}
+    <a target="_blank" href="{{ settings.social_pinterest_link }}" title="{{ 'general.social.alt_text.view_on_pinterest' | t }}">
+      {% include 'icon-pinterest' %}
+      <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.link_pinterest' | t }}</span>
+      <span class="visually-hidden">{{ 'general.social.alt_text.view_on_pinterest' | t }}</span>
+    </a>
+  {% endif %}
+
+  {% if settings.social_instagram_link != blank %}
+    <a target="_blank" href="{{ settings.social_instagram_link }}" title="{{ 'general.social.alt_text.view_on_instagram' | t }}">
+      {% include 'icon-instagram' %}
+      <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.link_instagram' | t }}</span>
+      <span class="visually-hidden">{{ 'general.social.alt_text.view_on_instagram' | t }}</span>
+    </a>
+  {% endif %}
+
+  {% if settings.social_tumblr_link != blank %}
+    <a target="_blank" href="{{ settings.social_tumblr_link }}" title="{{ 'general.social.alt_text.view_on_tumblr' | t }}">
+      {% include 'icon-tumblr' %}
+      <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.link_tumblr' | t }}</span>
+      <span class="visually-hidden">{{ 'general.social.alt_text.view_on_tumblr' | t }}</span>
+    </a>
+  {% endif %}
+
+  {% if settings.social_youtube_link != blank %}
+    <a target="_blank" href="{{ settings.social_youtube_link }}" title="{{ 'general.social.alt_text.view_on_youtube' | t }}">
+      {% include 'icon-youtube' %}
+      <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.link_youtube' | t }}</span>
+      <span class="visually-hidden">{{ 'general.social.alt_text.view_on_youtube' | t }}</span>
+    </a>
+  {% endif %}
+
+  {% if settings.social_vimeo_link != blank %}
+    <a target="_blank" href="{{ settings.social_vimeo_link }}" title="{{ 'general.social.alt_text.view_on_vimeo' | t }}">
+      {% include 'icon-vimeo' %}
+      <span class="icon__fallback-text" aria-hidden="true">{{ 'general.social.link_vimeo' | t }}</span>
+      <span class="visually-hidden">{{ 'general.social.alt_text.view_on_vimeo' | t }}</span>
+    </a>
+  {% endif %}
+
+</div>
